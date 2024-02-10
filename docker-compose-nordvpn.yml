@@ -40,16 +40,16 @@ services:
       # - /yourpath/yourconfig.conf:/gluetun/config.conf:ro
 
     networks:
-      - mynetwork
+      - arrnetwork
     
     # Uncomment/enable below ports if VPN is used/enabled
-    # ports:
-    #   # qbittorrent ports
-    #   - 5080:5080
-    #   - 6881:6881
-    #   - 6881:6881/udp
-    #   # prowlarr ports
-    #   - 9696:9696
+    ports:
+      # qbittorrent ports
+      - 5080:5080
+      - 6881:6881
+      - 6881:6881/udp
+      # prowlarr ports
+      - 9696:9696
     restart: "unless-stopped"
 
   ## Default credentials of qBittorrent - Username: admin password: adminadmin ##
@@ -91,8 +91,8 @@ services:
     networks:
     #   - mynetwork   # Comment this line if VPN is enabled
     ## Uncomment below lines if VPN is enabled
-      mynetwork:
-        ipv4_address: ${RADARR_STATIC_CONTAINER_IP} # It should be available IPv4 address in range of docker network `mynetwork` e.g. 172.20.0.2
+      arrnetwork:
+        ipv4_address: ${RADARR_STATIC_CONTAINER_IP} # It should be available IPv4 address in range of docker network `arrnetwork` e.g. 172.20.0.2
     environment:
       - PUID=1000
       - PGID=1000
@@ -110,8 +110,8 @@ services:
     networks:
     #   - mynetwork   # Comment this line if VPN is enabled
     ## Uncomment below lines if VPN is enabled
-      mynetwork:
-        ipv4_address: ${SONARR_STATIC_CONTAINER_IP} # It should be available IPv4 address in range of docker network `mynetwork` e.g. 172.20.0.2
+      arrnetwork:
+        ipv4_address: ${SONARR_STATIC_CONTAINER_IP} # It should be available IPv4 address in range of docker network `arrnetwork` e.g. 172.20.0.2
     environment:
       - PUID=1000
       - PGID=1000
@@ -150,7 +150,7 @@ services:
     image: linuxserver/jellyfin:10.8.13
     container_name: jellyfin
     networks:
-      - mynetwork
+      - arrnetwork
     environment:
       - PUID=1000
       - PGID=1000
@@ -206,5 +206,5 @@ volumes:
   # cleanmyarr-config:
 
 networks:
-  mynetwork:
+  arrnetwork:
     external: true
