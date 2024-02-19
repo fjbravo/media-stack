@@ -132,14 +132,17 @@ services:
     container_name: flaresolverr
     # DockerHub mirror flaresolverr/flaresolverr:latest
     image: ghcr.io/flaresolverr/flaresolverr:latest
+
     depends_on:               # Uncomment this line if vpn is enabled
       - vpn                   # Uncomment this line if vpn is enabled
     network_mode: service:vpn # Uncomment this line if vpn is enabled
+
     environment:
       - LOG_LEVEL=${LOG_LEVEL:-info}
       - LOG_HTML=${LOG_HTML:-false}
       - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
       - TZ=UTC
+
     #ports:
     #  - "${PORT:-8191}:8191"
     restart: unless-stopped
@@ -186,6 +189,33 @@ services:
       - 7359:7359/udp
       - 8920:8920
     restart: unless-stopped
+
+###########################################################################
+###########################################################################
+##
+##  Docker Compose File: SABnzbd (LinuxServer.io)
+##  Function: Usenet Download Client
+##
+##  Documentation: https://docs.linuxserver.io/images/docker-sabnzbd
+##
+###########################################################################
+###########################################################################
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    restart: unless-stopped
+    volumes:
+      - ${LOCAL_DOCKER_STORAGE}/sabnzbd/config:/config
+      - ${TORRENT_DOWNLOADS}/Usenet/downloads:/data
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+      - DOCKER_MODS=ghcr.io/gilbn/theme.park:sabnzbd
+#      - TP_THEME=${TP_THEME:?err}
+    network_mode: service:vpn
+#    ports:
+#      - "${WEBUI_PORT_SABNZBD:?err}:8080"             # Configured in Gluetun VPN container
   
   # Doc: https://github.com/navilg/cleanmyarr
   # cleanmyarr:
